@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sezzle Interview — Cheat Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+                color: #e0e0e0;
+            }
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .toc {
+                position: static !important;
+            }
+        }
+
+        .toc {
+            position: sticky;
+            top: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            height: fit-content;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .toc {
+                background: #2a2a2a;
+                border-color: #444;
+            }
+        }
+
+        .toc h2 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: #0066cc;
+            font-size: 13px;
+            display: block;
+            padding: 6px 0;
+            transition: all 0.2s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .toc a {
+                color: #66b3ff;
+            }
+        }
+
+        .toc a:hover {
+            color: #0052a3;
+            padding-left: 4px;
+        }
+
+        .content {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .content {
+                background: #2a2a2a;
+                box-shadow: none;
+                border: 1px solid #444;
+            }
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            h1 {
+                color: #fff;
+            }
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .subtitle {
+                color: #aaa;
+            }
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            scroll-margin-top: 80px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            h2 {
+                border-top-color: #444;
+            }
+        }
+
+        h3 {
+            font-size: 16px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #0066cc;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            h3 {
+                color: #66b3ff;
+            }
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            font-weight: 600;
+            color: #000;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            strong {
+                color: #fff;
+            }
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            code {
+                background: #3a3a3a;
+                color: #e0e0e0;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f9f9f9;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid #ddd;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            th {
+                background: #3a3a3a;
+                border-color: #555;
+            }
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            td {
+                border-color: #555;
+            }
+        }
+
+        blockquote {
+            border-left: 4px solid #0066cc;
+            padding-left: 16px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            blockquote {
+                border-left-color: #66b3ff;
+                color: #aaa;
+            }
+        }
+
+        .highlight {
+            background: #fffbea;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .highlight {
+                background: #3a3400;
+            }
+        }
+
+        .back-to-top {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0066cc;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 999;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .back-to-top {
+                background: #66b3ff;
+                color: #000;
+            }
+        }
+
+        .back-to-top:hover {
+            opacity: 0.9;
+        }
+
+        .back-to-top.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- TABLE OF CONTENTS -->
+        <div class="toc">
+            <h2>📋 Quick Nav</h2>
+            <ul>
+                <li><a href="#your-story">Your Story</a></li>
+                <li><a href="#metsa-story">Metsa Story</a></li>
+                <li><a href="#why-leaving">Why Leaving PwC</a></li>
+                <li><a href="#key-numbers">Key Numbers</a></li>
+                <li><a href="#tech-deep-dive">Tech Deep Dive</a>
+                    <ul style="margin-left: 10px; margin-top: 8px;">
+                        <li><a href="#jamf">Jamf Pro</a></li>
+                        <li><a href="#gwa">Google Workspace</a></li>
+                        <li><a href="#intune">Intune + Azure AD</a></li>
+                        <li><a href="#soc2">SOC 2 Type 2</a></li>
+                        <li><a href="#pcidss">PCI-DSS</a></li>
+                        <li><a href="#jira">Jira</a></li>
+                        <li><a href="#mdm">MDM</a></li>
+                    </ul>
+                </li>
+                <li><a href="#tools-skills">Tools & Skills</a></li>
+                <li><a href="#culture">Culture Keywords</a></li>
+                <li><a href="#oncall">On-Call & Prevention</a></li>
+                <li><a href="#bash">Bash Scripts</a></li>
+                <li><a href="#responses">Responses</a></li>
+                <li><a href="#difficult-questions">Difficult Questions</a></li>
+                <li><a href="#ask-them">Ask Them</a></li>
+                <li><a href="#traps">Traps to Avoid</a></li>
+                <li><a href="#end">End With</a></li>
+            </ul>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="content">
+            <h1>🎯 Sezzle Interview — Cheat Sheet</h1>
+            <p class="subtitle">Keep this open during the call. Quick reference only.</p>
+
+            <!-- YOUR STORY -->
+            <section id="your-story">
+                <h2>Your Story (30 sec pitch)</h2>
+                <ul>
+                    <li><strong>7 years IT Ops</strong> → CitiBanamex (banking) → Metsa (small team) → PwC (enterprise)</li>
+                    <li><strong>Metsa:</strong> 4h→1h onboarding, 80% config drift reduction via Jamf automation</li>
+                    <li><strong>Why Sezzle:</strong> Want autonomy & hands-on impact. Colombia expansion = perfect challenge.</li>
+                </ul>
+            </section>
+
+            <!-- METSA STORY -->
+            <section id="metsa-story">
+                <h2>Your Metsa Story — The MDM Transformation (1-2 min)</h2>
+
+                <h3>The Problem (Start here)</h3>
+                <ul>
+                    <li>Metsa is a small manufacturing company, ~30-40 employees</li>
+                    <li>Device management was completely manual — each new hire's device was configured differently</li>
+                    <li>Onboarding took <strong>4+ hours per device</strong> (person sat down, IT manually configured everything)</li>
+                    <li><strong>Configuration drift:</strong> No two devices were the same. Some had VPN, some didn't. Security was inconsistent.</li>
+                    <li>This meant every time someone needed help, IT had to remember "oh, <em>that</em> device has X but not Y"</li>
+                    <li>As company grew from 30 to 40 devices, this didn't scale. We needed automation.</li>
+                </ul>
+
+                <h3>What I Built (Expand here)</h3>
+                <ul>
+                    <li>Implemented <strong>Automated Device Enrollment (ADE)</strong> via Apple Business Manager
+                        <ul>
+                            <li>Device powers on → automatically enrolls in Jamf → zero human touch</li>
+                        </ul>
+                    </li>
+                    <li>Built <strong>Jamf Policies</strong> targeting different roles
+                        <ul>
+                            <li>Example: Sales team gets VPN + Slack + Teams. Warehouse staff gets different config.</li>
+                        </ul>
+                    </li>
+                    <li>Wrote <strong>Bash scripts</strong> as Jamf Custom Triggers to automate software deployments
+                        <ul>
+                            <li>Instead of manually installing Adobe on each device, Jamf runs the script</li>
+                            <li>Same for Slack, Teams, browsers, compliance tools</li>
+                        </ul>
+                    </li>
+                    <li>Created <strong>Jamf Extension Attributes</strong> to track device health
+                        <ul>
+                            <li>Automatically check: Is FileVault enabled? Is device on latest macOS? Is compliance tool running?</li>
+                            <li>Weekly reports told me which devices were out of compliance</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>The Results (Use numbers)</h3>
+                <ul>
+                    <li><span class="highlight"><strong>4 hours → 1 hour</strong> per device onboarding (75% time reduction)</span></li>
+                    <li><strong>80% reduction</strong> in configuration drift (consistency across all devices)</li>
+                    <li><strong>Zero manual intervention</strong> for new hires (they get a device, it auto-configures)</li>
+                    <li>Compliance audits went from <strong>1 day to 30 minutes</strong> (because I had Extension Attributes giving me the data)</li>
+                    <li><strong>No extra headcount</strong> — company grew 30→40 devices, I didn't hire help. Automation did the work.</li>
+                </ul>
+
+                <h3>Why This Matters (The lesson)</h3>
+                <p>It wasn't just "I know Jamf." It was "I saw a problem, designed a solution, and built something that scaled without adding people." This is what I want to do at Sezzle in Colombia.</p>
+            </section>
+
+            <!-- WHY LEAVING -->
+            <section id="why-leaving">
+                <h2>Why You're Leaving PwC & Choosing Sezzle (1-2 min)</h2>
+
+                <h3>What PwC Got Right</h3>
+                <ul>
+                    <li>I learned enterprise IT at scale — ServiceNow, SOC 2, PCI-DSS, strict SLAs</li>
+                    <li>I can handle high-pressure environments</li>
+                    <li>I'm good at what I do — I hit <strong>98% SLA compliance</strong></li>
+                </ul>
+
+                <h3>What Changed at PwC (The honest part)</h3>
+                <ul>
+                    <li>My role shifted to <strong>60% watching automated processes run</strong></li>
+                    <li>I triage tickets, but the system resolves them automatically</li>
+                    <li>I don't <em>build</em> things anymore — I maintain systems someone else built</li>
+                    <li>There's no "I saw a problem, I fixed it" moment</li>
+                    <li>The work feels <strong>transactional</strong>, not <strong>impactful</strong></li>
+                </ul>
+
+                <h3>What I Miss (The drive)</h3>
+                <ul>
+                    <li>At Metsa, I felt the impact: people got their devices faster, IT team had fewer headaches, compliance became automatic</li>
+                    <li>I want to be <strong>hands-on</strong> — troubleshooting, designing, building systems that actually get <em>used</em></li>
+                    <li>I want <strong>autonomy</strong> — "here's the problem, I own the solution" (not "follow the playbook")</li>
+                </ul>
+
+                <h3>Why Sezzle Specifically (The fit)</h3>
+                <ul>
+                    <li><strong>Colombia expansion</strong> = exactly what I want. You're building ops from scratch in a new market.
+                        <ul>
+                            <li>Not maintaining an existing system, but <em>designing</em> one</li>
+                            <li>Get to choose the architecture: Google Workspace, Jamf, Azure AD, the right tools</li>
+                            <li>Onboard the first 10 people in Colombia — I'd own that process</li>
+                        </ul>
+                    </li>
+                    <li><strong>Your culture</strong> matches how I work naturally
+                        <ul>
+                            <li>"High standards" — I don't ship 'good enough'</li>
+                            <li>"Move fast" — I can make decisions without hand-holding</li>
+                            <li>"Not bound by convention" — I'll push back if something is broken (like I did at Metsa)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Impact is visible</strong> — Sezzle is growing, and I'd be part of building the ops foundation in a new market</li>
+                </ul>
+
+                <blockquote>
+                    "PwC taught me enterprise IT, but I realized I want hands-on impact. At Metsa, I built something that scaled without adding headcount — that's what I love. Sezzle's Colombia expansion is exactly that opportunity. I'm not running <em>away</em> from PwC; I'm running <em>toward</em> building something at Sezzle."
+                </blockquote>
+
+                <h3>Sezzle Research & Company Fit</h3>
+                <p><strong>What you know about Sezzle:</strong></p>
+                <ul>
+                    <li><strong>Scaling fast:</strong> 50% revenue growth year-over-year</li>
+                    <li><strong>Building Latin America hub:</strong> Colombia expansion underway (many job postings in LATAM)</li>
+                    <li><strong>MEI Framework:</strong> Merit, Excellence, Intelligence — value impact over tenure</li>
+                    <li><strong>Fintech culture:</strong> Fast-paced, not bound by convention, autonomy-driven</li>
+                </ul>
+                <p><strong>Why Sezzle fits YOU specifically:</strong></p>
+                <ul>
+                    <li>Colombia build = build from scratch, not maintain existing (what you want)</li>
+                    <li>Impact recognized immediately (when you automate MDM or deploy security, it's noticed)</li>
+                    <li>MEI means your technical decisions shape how the ops team scales</li>
+                    <li>Part of founding ops hub in new market = legacy/ownership feeling</li>
+                </ul>
+            </section>
+
+            <!-- KEY NUMBERS -->
+            <section id="key-numbers">
+                <h2>Key Numbers (have ready)</h2>
+                <ul>
+                    <li>~35 macOS devices @ Metsa</li>
+                    <li><span class="highlight">4 hours → 1 hour onboarding improvement</span></li>
+                    <li><span class="highlight">80% reduction in configuration drift</span></li>
+                    <li>~150 tickets/month @ PwC, <span class="highlight">98% SLA compliance</span></li>
+                    <li>30 to 40 device fleet growth @ Metsa (no extra headcount)</li>
+                </ul>
+            </section>
+
+            <!-- TECH DEEP DIVE -->
+            <section id="tech-deep-dive">
+                <h2>Tech Deep Dive — What They're Asking For</h2>
+
+                <h3 id="jamf">JAMF PRO (Apple device management)</h3>
+                <p><strong>What it is:</strong> MDM for macOS/iOS — enrolls devices, deploys configs, enforces security</p>
+                <p><strong>Your experience:</strong></p>
+                <ul>
+                    <li>Automated Device Enrollment (ADE) via Apple Business Manager (ABM)</li>
+                    <li>Built Jamf Policies for targeted config deployment (different policies per role)</li>
+                    <li>Custom Triggers using Bash scripts to automate app deployments (Adobe, Slack, Teams)</li>
+                    <li>Jamf Extension Attributes to track device health (FileVault status, security updates)</li>
+                    <li>Troubleshooting: <code>jamf log</code>, JSS server logs, policy execution order matters</li>
+                </ul>
+                <p><strong>Talking points:</strong></p>
+                <ul>
+                    <li>"I don't just use the UI — I've built automation with Bash custom triggers"</li>
+                    <li>"At Metsa, policy order was critical: WiFi profiles before VPN, otherwise enrollment would fail"</li>
+                    <li>"I know the difference between a Policy and a Configuration Profile"</li>
+                </ul>
+
+                <h4>Debugging Custom Triggers: Silent Failures</h4>
+                <p><strong>The problem:</strong> Script exits with code 0 (success) but action didn't complete</p>
+                <ul>
+                    <li>Check Jamf logs (stdout/stderr) on client machine to see what actually ran</li>
+                    <li>Review Jamf Pro policy history to confirm parameters passed to script</li>
+                    <li>Common culprits: context (root vs user), environment variables, relative paths</li>
+                    <li>Verify script uses absolute paths (e.g., <code>/usr/bin/curl</code> not just <code>curl</code>)</li>
+                    <li>Run script manually on test machine with verbose flag to catch unhandled errors</li>
+                    <li>Update script to explicitly capture non-zero exit codes for proper reporting</li>
+                </ul>
+
+                <h3 id="gwa">GOOGLE WORKSPACE (cloud identity + productivity suite)</h3>
+                <p><strong>What it is:</strong> Gmail, Docs, Drive, Meet + identity management for user provisioning/offboarding</p>
+                <p><strong>Your experience:</strong></p>
+                <ul>
+                    <li>User provisioning/offboarding (create → assign groups → remove access)</li>
+                    <li>Organizational Units (OUs) for targeting different security policies</li>
+                    <li>Google Groups for delegation and access control</li>
+                    <li>MFA setup, password policies, device compliance rules</li>
+                    <li><strong>Honest gap:</strong> Last hands-on was 2022-2023, it's rusty but fundamentals haven't changed</li>
+                </ul>
+                <p><strong>Talking points:</strong></p>
+                <ul>
+                    <li>"GWA is really identity management + productivity bundled together"</li>
+                    <li>"The key is OUs — you target policies by OU, not individual users"</li>
+                    <li>"I'm comfortable with user lifecycle (prov/deprov), but I'd want 1 week to refresh on recent security features"</li>
+                </ul>
+
+                <h3 id="intune">INTUNE + AZURE AD (Microsoft device management + cloud identity)</h3>
+                <p><strong>What it is:</strong> MDM for Windows/mobile + Azure AD (cloud identity layer)</p>
+                <p><strong>Your experience:</strong></p>
+                <ul>
+                    <li>Intune Autopilot for zero-touch Windows enrollment</li>
+                    <li>Conditional Access policies (block login if device doesn't meet compliance)</li>
+                    <li>Azure AD groups for targeting policies</li>
+                    <li>BitLocker enforcement (Windows full-disk encryption)</li>
+                    <li>Managed app protection (control who can access what on the device)</li>
+                </ul>
+                <p><strong>Talking points:</strong></p>
+                <ul>
+                    <li>"Intune is tighter to Microsoft than Jamf is to Apple — Azure AD is the identity hub"</li>
+                    <li>"Conditional Access is powerful: you can say 'if device isn't compliant, require MFA' or block entirely"</li>
+                    <li>"Windows MDM at Metsa showed me how to think about compliance-driven enrollment"</li>
+                </ul>
+                <p><strong>Key difference from Jamf:</strong></p>
+                <ul>
+                    <li>Jamf = macOS focus, elegant but pricier per device</li>
+                    <li>Intune = Windows focus, cheaper, tight Azure integration</li>
+                </ul>
+
+                <h4>Learning Intune (If You Haven't Worked With It)</h4>
+                <p><strong>Your approach:</strong></p>
+                <ul>
+                    <li><strong>Map your Jamf knowledge:</strong> Configuration profiles → Intune policies, Smart Groups → Azure AD dynamic groups</li>
+                    <li><strong>Build a sandbox:</strong> Spin up free Microsoft 365 dev tenant immediately (don't test on production)</li>
+                    <li><strong>Learn from docs:</strong> Microsoft Learn + admin communities for platform-specific nuances</li>
+                    <li><strong>You're not starting from scratch:</strong> MDM fundamentals are the same (identity, policy, compliance)</li>
+                    <li><strong>Honest timeline:</strong> Dangerous in 2 weeks, expert in 2 months</li>
+                </ul>
+
+                <h3 id="soc2">SOC 2 TYPE 2 COMPLIANCE (Security/availability/confidentiality audit standard)</h3>
+                <p><strong>What it is:</strong> Third-party audit that says "Yes, this company's IT controls are legit"</p>
+                <p><strong>What ops people do:</strong></p>
+                <ul>
+                    <li>Document every access control (who can log in, when, from where)</li>
+                    <li>Maintain audit logs (everything is logged for 6+ months)</li>
+                    <li>Enforce encryption (FileVault on Mac, BitLocker on Windows)</li>
+                    <li>Regular access reviews (every quarter, verify people have the right permissions)</li>
+                    <li>Change management (document why/when policies changed)</li>
+                </ul>
+                <p><strong>Your experience at PwC:</strong></p>
+                <ul>
+                    <li>Monitored system logs, user access roles, platform integrity</li>
+                    <li>Conducted regular audits to prevent security vulnerabilities</li>
+                    <li>Understood that SOC 2 requires <em>documentation</em> — you can't just say "we're secure," you have to prove it</li>
+                </ul>
+                <p><strong>Talking points:</strong></p>
+                <ul>
+                    <li>"SOC 2 Type 2 isn't about 'pass/fail' — it's about <em>documented controls</em>"</li>
+                    <li>"As ops, my job is to make sure the controls actually work and are auditable"</li>
+                    <li>"At PwC, I learned that SOC 2 compliance is 20% technical, 80% documentation"</li>
+                </ul>
+
+                <h3 id="pcidss">PCI-DSS COMPLIANCE (Payment Card Industry Data Security Standard)</h3>
+                <p><strong>What it is:</strong> Standard for handling payment card data — strict, regulated, audited</p>
+                <p><strong>What it requires:</strong></p>
+                <ul>
+                    <li>Network segmentation (card data isolated from general network)</li>
+                    <li>Encryption (data in transit + at rest)</li>
+                    <li>Access control (principle of least privilege)</li>
+                    <li>Logging & monitoring (audit trail for every transaction)</li>
+                    <li>Regular vulnerability scanning</li>
+                    <li>NO hardcoded passwords, NO default credentials</li>
+                </ul>
+                <p><strong>Your experience at CitiBanamex:</strong></p>
+                <ul>
+                    <li>Worked on high-security banking systems under PCI-DSS compliance</li>
+                    <li>Performed technical debugging on payment systems (couldn't break rules)</li>
+                    <li>Wrote SQL queries to audit transaction history and verify account anomalies</li>
+                    <li>Understood that one mistake = compliance violation = audit failure</li>
+                </ul>
+                <p><strong>Talking points:</strong></p>
+                <ul>
+                    <li>"PCI-DSS is strict because it's protecting credit card data — one gap gets you fined"</li>
+                    <li>"Ops role: I make sure the infrastructure supports compliance (encryption, logging, access controls)"</li>
+                    <li>"I won't cut corners on security — it's built in from the start, not added later"</li>
+                </ul>
+
+                <h3 id="jira">JIRA for IT Operations (Ticketing + backlog management)</h3>
+                <p><strong>What it is:</strong> Ticket system PLUS backlog of improvements (hybrid of ServiceNow + project mgmt)</p>
+                <p><strong>Your ServiceNow background transfers:</strong></p>
+                <ul>
+                    <li>Ticket triage (what's urgent, what's low priority)</li>
+                    <li>SLA compliance tracking</li>
+                    <li>Ticket automation (when ticket status changes, do X)</li>
+                    <li>Reporting (how many tickets per category, avg resolution time)</li>
+                </ul>
+                <p><strong>What's different in Jira:</strong></p>
+                <ul>
+                    <li>Sprints (work organized in 2-week cycles)</li>
+                    <li>Story points (estimate effort: 1 pt, 3 pts, 5 pts)</li>
+                    <li>Backlog workflow (initiatives → epics → user stories → tasks)</li>
+                    <li>Automation rules (if ticket status = "done," notify team)</li>
+                </ul>
+                <p><strong>Talking points:</strong></p>
+                <ul>
+                    <li>"Jira for IT Service Desk is similar to ServiceNow — you're triaging tickets, meeting SLAs"</li>
+                    <li>"Jira's strength is its backlog. ServiceNow is linear (ticket → close). Jira lets you plan improvements alongside incident response"</li>
+                    <li>"I'd be dangerous in 2 weeks, expert in 2 months"</li>
+                </ul>
+
+                <h3 id="mdm">MDM IMPLEMENTATION (Mobile Device Management general concept)</h3>
+                <p><strong>What it is:</strong> Central control of employee devices (Mac, Windows, iOS, Android)</p>
+                <p><strong>Why it matters:</strong></p>
+                <ul>
+                    <li>Security: enforce encryption, require MFA, wipe lost devices</li>
+                    <li>Compliance: audit trail (who accessed what)</li>
+                    <li>Efficiency: automatic software deployment (no manual install per device)</li>
+                    <li>Lifecycle: when employee leaves, remote wipe and offboard in one step</li>
+                </ul>
+                <p><strong>Your approach at Metsa (the story):</strong></p>
+                <ul>
+                    <li><strong>Before:</strong> Manual config per device, 4 hours per hire, inconsistent security</li>
+                    <li><strong>After:</strong> Zero-touch enrollment + Jamf policies. 1 hour per hire, 100% compliant</li>
+                    <li><strong>How:</strong> ADE for auto-enroll, Policies for auto-config, Extension Attributes for health checks</li>
+                </ul>
+                <p><strong>Talking points:</strong></p>
+                <ul>
+                    <li>"MDM isn't about control-freak IT. It's about scaling ops without adding headcount"</li>
+                    <li>"Good MDM = user rarely knows it's there, but security is locked in"</li>
+                </ul>
+            </section>
+
+            <!-- TOOLS & SKILLS -->
+            <section id="tools-skills">
+                <h2>Tools & Skills Summary ✅</h2>
+                <table>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Your Level</th>
+                        <th>Proof</th>
+                        <th>Ready?</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Jamf Pro</strong></td>
+                        <td>Expert</td>
+                        <td>Automated Metsa 4h→1h</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Intune/Azure AD</strong></td>
+                        <td>Intermediate</td>
+                        <td>Deployed Intune Autopilot @ Metsa</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Google Workspace</strong></td>
+                        <td>Rusty</td>
+                        <td>2022-2023 hands-on</td>
+                        <td>⚠️ Have plan</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SOC 2 Type 2</strong></td>
+                        <td>Practical</td>
+                        <td>Implemented @ PwC</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCI-DSS</strong></td>
+                        <td>Practical</td>
+                        <td>Worked under it @ CitiBanamex</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ServiceNow</strong></td>
+                        <td>Expert</td>
+                        <td>Tier 2/3 triage @ PwC</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jira</strong></td>
+                        <td>None</td>
+                        <td>But understand from ServiceNow</td>
+                        <td>⚠️ Honest timeline</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bash scripting</strong></td>
+                        <td>Intermediate</td>
+                        <td>Custom Jamf triggers @ Metsa</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- CULTURE KEYWORDS -->
+            <section id="culture">
+                <h2>Culture Keywords (Sezzle values)</h2>
+                <ul>
+                    <li><strong>High standards</strong> — "I don't ship 'good enough'"</li>
+                    <li><strong>Move fast</strong> — "Calculated risk-taking. I think through failure, then move."</li>
+                    <li><strong>Not bound by convention</strong> — "Standardization ≠ rigid. I challenged manual configs at Metsa."</li>
+                    <li><strong>Autonomy</strong> — "I don't wait for sign-offs. I propose, then move unless stopped."</li>
+                    <li><strong>Impact</strong> — "I want to see my work used. Colombia expansion scratches that itch."</li>
+                </ul>
+            </section>
+
+            <!-- ON-CALL -->
+            <section id="oncall">
+                <h2>On-Call & Prevention Strategy</h2>
+                <p><strong>The Question:</strong> "If you're worried about multiple enrollments overloading the server, what would you <em>actually</em> do to prevent it?"</p>
+
+                <h3>Your Answer (Be specific, not theoretical)</h3>
+
+                <h4>1. Monitoring (The Eyes)</h4>
+                <ul>
+                    <li>Set up alerts on Jamf/MDM server: CPU usage, memory usage, enrollment queue depth</li>
+                    <li>Real-time dashboard showing: "How many devices are trying to enroll right now?"</li>
+                    <li>If queue is growing faster than devices are enrolling, alert fires</li>
+                </ul>
+
+                <h4>2. Throttling (The Governor)</h4>
+                <ul>
+                    <li>Don't let unlimited devices enroll simultaneously — set a limit</li>
+                    <li>Example: "Only 5 devices can enroll at the same time. The rest wait in queue."</li>
+                    <li>This prevents the server from getting hammered</li>
+                </ul>
+
+                <h4>3. Capacity Planning (Know Your Limits)</h4>
+                <ul>
+                    <li>Test beforehand: "Our server can handle ~50 concurrent enrollments before it chokes"</li>
+                    <li>Document it: "If we're on-boarding 200 people in Colombia, spread it over 4 days, not 1 day"</li>
+                    <li>Plan for it, don't discover it at 3 AM</li>
+                </ul>
+
+                <h4>4. Runbooks (If It Happens Anyway)</h4>
+                <ul>
+                    <li>Have a documented playbook:
+                        <ul>
+                            <li>Step 1: Check Jamf server health (CPU, memory, disk space)</li>
+                            <li>Step 2: If queue is backed up, throttle enrollments manually</li>
+                            <li>Step 3: Notify users: "Devices will enroll in ~30 mins, please be patient"</li>
+                            <li>Step 4: Monitor until queue clears</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h4>5. Communication (Prevent Panic)</h4>
+                <ul>
+                    <li>If enrollments are slow, users might keep restarting their devices</li>
+                    <li>Send a proactive message: "We're on-boarding 50 devices today. Your device will enroll automatically. You don't need to do anything."</li>
+                    <li>This prevents users from making it worse</li>
+                </ul>
+
+                <blockquote>
+                    "I'd set up monitoring on the MDM server to watch CPU, memory, and enrollment queue depth. If the queue gets too deep or server resources spike, I'd get an alert. I'd also throttle enrollments — maybe only 5 devices at a time — so we don't overwhelm the server. And I'd have a runbook: if something does go wrong at 3 AM, I follow the steps, I don't improvise. The key is investing upfront so 3 AM calls don't happen in the first place."
+                </blockquote>
+
+                <p><strong>Why This Matters:</strong></p>
+                <ul>
+                    <li>Shows you're not just reactive (waiting for the fire)</li>
+                    <li>You're proactive (preventing the fire)</li>
+                    <li>You have a system (monitoring + throttling + runbooks)</li>
+                    <li>You communicate (users aren't surprised)</li>
+                </ul>
+
+                <h3>Compliance Gap Discovery: Saturday Night Response Protocol</h3>
+                <p><strong>Scenario:</strong> It's Saturday evening, you find a compliance gap (SOC 2, PCI-DSS, etc.)</p>
+                <p><strong>Your decision tree:</strong></p>
+                <ul>
+                    <li><strong>Is data actively exposed?</strong> YES → Lock it down immediately (2-hour max)</li>
+                    <li><strong>Is it just a config gap?</strong> NO active threat → Document, don't panic</li>
+                </ul>
+                <p><strong>Your action:</strong></p>
+                <ul>
+                    <li>Notify security/compliance lead + manager via emergency channel <strong>immediately</strong></li>
+                    <li><strong>Document the time</strong> (shows audit readiness, not panic)</li>
+                    <li>Prioritize: Minor gap? → Log it, implement compensating control, schedule Monday fix</li>
+                    <li>Never do a hasty hot fix Saturday that could cause outage Monday morning</li>
+                    <li>Follow this rule: <strong>Do it right Monday, not rushed Saturday</strong></li>
+                </ul>
+            </section>
+
+            <!-- BASH SCRIPTS -->
+            <section id="bash">
+                <h2>Bash Scripts & Technical Depth</h2>
+                <p><strong>The Question:</strong> "Tell me about a Bash script you actually wrote for Jamf."</p>
+
+                <h3>Your Real Example (Use this)</h3>
+                <p>At Metsa, I wrote a script that <strong>deployed Adobe Creative Suite</strong> and verified it installed correctly. Here's what it did:</p>
+
+                <h4>What the script did</h4>
+                <ol>
+                    <li>Check if Adobe was already installed (no point reinstalling)</li>
+                    <li>If not installed, download from our internal repository</li>
+                    <li>Run the installer silently (no user prompts, just installs in background)</li>
+                    <li>Verify the installation succeeded (check if the app is in /Applications)</li>
+                    <li>If it failed, log the error and notify us (so IT knows it didn't work)</li>
+                    <li>If it succeeded, log it (for compliance audits)</li>
+                </ol>
+
+                <h4>Why it was tricky</h4>
+                <ul>
+                    <li>Adobe installers sometimes fail silently — you think it installed, but it didn't</li>
+                    <li>The script had to <strong>catch errors and report them back</strong> so I'd know which devices had problems</li>
+                    <li>I had to make sure the script ran as root (admin level) or it wouldn't have permission to install</li>
+                    <li>Logging was critical — if a compliance audit asked "was Adobe installed on Device X on Date Y?", I had to prove it via logs</li>
+                </ul>
+
+                <h4>A simplified version of the logic</h4>
+                <pre><code>If Adobe is installed → skip (don't reinstall)
+Else → download from repo → install → check if /Applications/Adobe exists
+  If exists → log "Success"
+  If not exists → log "Failed on Device $(hostname)" and alert IT</code></pre>
+
+                <h4>Key learning</h4>
+                <ul>
+                    <li>Bash scripts aren't about being fancy — they're about <strong>solving real problems</strong></li>
+                    <li>In this case: "How do I deploy software to 35 devices without doing it manually 35 times?"</li>
+                    <li>The script also meant I could track what was installed where, which was huge for compliance</li>
+                </ul>
+
+                <blockquote>
+                    "I wasn't writing complex scripts. I was automating repetitive tasks. The Adobe deployment is a good example — instead of manually installing on each device, Jamf runs my script, and I get a log telling me which devices succeeded and which failed. That's where the value is: automation + visibility."
+                </blockquote>
+
+                <h4>If David asks follow-ups</h4>
+                <ul>
+                    <li><strong>"Did you use any error handling?"</strong> → YES. The script checks if the app exists and logs failures.</li>
+                    <li><strong>"How do you know if it failed?"</strong> → Logs. I check Jamf logs and look at the exit code.</li>
+                    <li><strong>"Ever had a script break something?"</strong> → Honestly, you learn to test in a test environment first. That's IT 101.</li>
+                </ul>
+            </section>
+
+            <!-- RESPONSES -->
+            <section id="responses">
+                <h2>Responses You'll Give</h2>
+                <table>
+                    <tr>
+                        <th>Likely Q</th>
+                        <th>Your Core Answer</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Tell us about you</strong></td>
+                        <td>7yrs ops, Metsa automation, want hands-on impact + autonomy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Why Sezzle?</strong></td>
+                        <td>Colombia build-from-scratch + culture match (speed, standards)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Worst ticket?</strong></td>
+                        <td>WiFi+VPN policy order issue → learned to read logs, not guess</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Google Workspace?</strong></td>
+                        <td>Real but rusty. Plan: 1-week refresh + your docs. Won't slow me down.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jamf vs Intune</strong></td>
+                        <td>Jamf for Apple (expensive, deep), Intune for Windows (Azure integration). I'd recommend both.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Autonomy example</strong></td>
+                        <td>PwC SLAs forced fast decisions. I propose action, they can block. Otherwise I move.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>On-call?</strong></td>
+                        <td>Comfortable. Invest upfront in runbooks so 3AM calls aren't thinking.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Why leave PwC</strong></td>
+                        <td>Not running from. Running to hands-on ops. PwC is automated/impersonal.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Saying "No" to users?</strong></td>
+                        <td>It's not personal—same "no" for anyone. Explain why, then offer acceptable solution.</td>
+                    </tr>
+                </table>
+
+                <h3>Handling When You Need to Say "No"</h3>
+                <p><strong>The situation:</strong> User or manager asks for something that violates policy, compliance, or security</p>
+                <p><strong>Your approach:</strong></p>
+                <ul>
+                    <li>Frame it as <strong>principle, not personal:</strong> "This would be a no for anyone, not just you"</li>
+                    <li>Explain the why (policy, compliance, security risk) — don't just block</li>
+                    <li><strong>Always offer an alternative:</strong> "We can't do X, but we can do Y"</li>
+                    <li>Shows you're solving the problem, not just saying no</li>
+                </ul>
+                <p><strong>Example:</strong> "I can't disable FileVault for easier access. But I can set up a recovery key in our password manager so you can recover if you forget your password."</p>
+            </section>
+
+            <!-- DIFFICULT QUESTIONS -->
+            <section id="difficult-questions">
+                <h2>Difficult Questions & Best Answers</h2>
+                <p><strong>These are tougher questions David might ask. Read them 2x and own them.</strong></p>
+
+                <h3>Q1: Saying "No" to Users or Managers</h3>
+                <p><strong>Question:</strong> "Tell me about a time you had to say 'no' to a user or manager about something they wanted done. How did you handle it?"</p>
+                <p><strong>Best Answer:</strong></p>
+                <blockquote>
+                    "It's pretty normal having to say no when you need to stick to policies, rules, or compliance requirements. The way I handle it is, I make sure I let the user know that it's not a no just for them—it would be a no for anyone in the same situation. And I always try to offer an acceptable solution. This keeps it professional and shows I'm not just blocking work, I'm solving the underlying problem."
+                </blockquote>
+                <p><strong>Why this works:</strong> Shows you're not difficult; you're principled. You explain the "why," not just the "no."</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>Q2: Debugging Jamf Custom Trigger Silent Failures</h3>
+                <p><strong>Question:</strong> "If a Jamf Custom Trigger script exits with code 0 but the action didn't actually complete, how would you debug that?"</p>
+                <p><strong>Best Answer:</strong></p>
+                <blockquote>
+                    "If a script exits with code 0, Jamf thinks it succeeded even if the script's internal logic silently failed. My first step is to isolate whether the issue is in Jamf's execution context or the script itself. I go to the client, check the Jamf logs for stdout and stderr to see what actually happened. Then I review the policy history in Jamf Pro to confirm what parameters were passed.
+
+After that, I focus on common culprits: context issues—the script runs as root but modifies user preferences, or there's an environment variable problem. I verify it uses absolute paths, not relative commands. If nothing obvious appears, I manually run the script on the machine with verbose output to see exactly where it breaks. Then I update the script to explicitly capture non-zero exit codes so Jamf properly reports failures in the future."
+                </blockquote>
+                <p><strong>Why this works:</strong> Shows deep Jamf knowledge, debugging methodology, and that you don't just rerun scripts blindly.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>Q3: Learning a System You Don't Know (Intune)</h3>
+                <p><strong>Question:</strong> "Your background is strong in Jamf and Google Workspace, but you haven't worked much with Intune. If we needed you to implement Windows MDM with Intune, how would you approach learning it?"</p>
+                <p><strong>Best Answer:</strong></p>
+                <blockquote>
+                    "MDM fundamentals are the same everywhere—identity, policy enforcement, compliance. I already know Jamf deeply, so it's really just learning the new syntax and interface.
+
+My approach: First, I map my Jamf logic to Intune—how configuration profiles translate to Intune policies, how smart groups map to Azure AD dynamic groups. Second, I spin up a free Microsoft 365 dev tenant immediately to sandbox and test without touching production. Third, I use Microsoft Learn and admin communities to catch platform-specific nuances.
+
+I'm comfortable learning systems quickly. For me, it's about getting the fundamentals right, testing thoroughly, and executing safely."
+                </blockquote>
+                <p><strong>Why this works:</strong> Shows confidence, a structured approach, and honesty about gaps. Plus you're not pretending to know something you don't.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>Q4: Compliance Gap Discovery on Saturday Night</h3>
+                <p><strong>Question:</strong> "It's Saturday night, and you discover a compliance gap—maybe something isn't meeting SOC 2 requirements. Do you call the team and fix it immediately, or wait until Monday?"</p>
+                <p><strong>Best Answer:</strong></p>
+                <blockquote>
+                    "First, I assess the risk. Is data actively exposed, or is it just a configuration gap? If it's active, I lock it down immediately. If it's just a compliance gap with no active threat, I don't panic or do a rushed hot fix on Saturday.
+
+I notify the security/compliance lead and my manager via our emergency channel right away—and I document the time, which actually shows audit readiness. Then we prioritize. If it's minor, we log it, implement a temporary compensating control, and schedule the proper fix for Monday with full testing.
+
+I'd rather do it right Monday than cause an outage Saturday trying to rush."
+                </blockquote>
+                <p><strong>Why this works:</strong> Shows judgment (not panic-driven), risk assessment, and that you communicate with leadership. Also demonstrates audit awareness.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>Q5: Why Sezzle Over PwC?</h3>
+                <p><strong>Question:</strong> "You mentioned at PwC everything feels automated and repetitive. But any job can feel that way sometimes. What specifically about Sezzle excites you? Why us and not another startup?"</p>
+                <p><strong>Best Answer:</strong></p>
+                <blockquote>
+                    "I know Sezzle is scaling fast—50% revenue growth year over year—and you're actively building out your Latin America engineering hub. Getting in now is critical: I help build systems, workflows, and security standards from the ground up, not just maintain what exists.
+
+Second, I align deeply with Sezzle's MEI framework: merit, excellence, and intelligence. You value impact over tenure. When I automate an MDM policy or implement a security workflow, that impact is recognized immediately. That's what drives me—working in a fast-paced fintech where my technical decisions directly shape how the team scales.
+
+Plus, being part of the Latin America hub from day one means contributing to something foundational for the region."
+                </blockquote>
+                <p><strong>Why this works:</strong> Shows you researched Sezzle (50% growth, MEI, Colombia). Connects your experience to their needs. Makes it about THEM, not just escaping PwC.</p>
+            </section>
+
+            <!-- ASK THEM -->
+            <section id="ask-them">
+                <h2>Ask Them</h2>
+                <p>Pick 1-2:</p>
+                <ul>
+                    <li>"What's the biggest pain point your ops team faces right now?"</li>
+                    <li>"For Colombia, what's the timeline — year 1 foundation or scale immediately?"</li>
+                    <li>"You mention 'not bound by convention' — can you give me a recent example?"</li>
+                </ul>
+            </section>
+
+            <!-- TRAPS -->
+            <section id="traps">
+                <h2>Traps to Avoid</h2>
+                <ul>
+                    <li>❌ Don't say you're expert at Google Workspace (you're not current)</li>
+                    <li>❌ Don't complain about PwC (frame as "I've learned what I want next")</li>
+                    <li>❌ Don't ramble — answer in 60-90 sec, not 3 minutes</li>
+                    <li>❌ Don't pretend to know Jira if you don't (say "ticketing logic transfers")</li>
+                    <li>❌ Don't oversell — admit gaps, show how you'd close them</li>
+                </ul>
+            </section>
+
+            <!-- END WITH -->
+            <section id="end">
+                <h2>End With</h2>
+                <blockquote>
+                    "Is there anything about my background that made you wonder if I'm a fit? I'd rather address it now."
+                </blockquote>
+                <p style="margin-top: 20px; color: #666;">
+                    <strong>Read this 3x before the call. You know this stuff — this is just your memory aid.</strong>
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <!-- BACK TO TOP BUTTON -->
+    <div class="back-to-top" id="backToTop">↑</div>
+
+    <script>
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
