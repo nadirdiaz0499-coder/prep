@@ -319,6 +319,9 @@
                 <li><a href="#bash">Bash Scripts</a></li>
                 <li><a href="#responses">Responses</a></li>
                 <li><a href="#difficult-questions">Difficult Questions</a></li>
+                <li><a href="#round3">Round 3 Mock Answers</a></li>
+                <li><a href="#short-scripts">Short Scripts (technical)</a></li>
+                <li><a href="#model-answers">Model Answers</a></li>
                 <li><a href="#ask-them">Ask Them</a></li>
                 <li><a href="#traps">Traps to Avoid</a></li>
                 <li><a href="#end">End With</a></li>
@@ -670,9 +673,9 @@
                     </tr>
                     <tr>
                         <td><strong>Google Workspace</strong></td>
-                        <td>Rusty</td>
-                        <td>2022-2023 hands-on</td>
-                        <td>⚠️ Have plan</td>
+                        <td>Working knowledge</td>
+                        <td>Used at PwC</td>
+                        <td>✅ Yes</td>
                     </tr>
                     <tr>
                         <td><strong>SOC 2 Type 2</strong></td>
@@ -970,6 +973,351 @@ Second, I align deeply with Sezzle's MEI framework: merit, excellence, and intel
 Plus, being part of the Latin America hub from day one means contributing to something foundational for the region."
                 </blockquote>
                 <p><strong>Why this works:</strong> Shows you researched Sezzle (50% growth, MEI, Colombia). Connects your experience to their needs. Makes it about THEM, not just escaping PwC.</p>
+            </section>
+
+            <!-- ROUND 3 MOCK -->
+            <section id="round3">
+                <h2>Round 3 Mock Answers (reference versions)</h2>
+                <p><strong>Target: 90 seconds each. Structure: Context → Problem → Action → Result → Lesson.</strong></p>
+                <p><strong>Note from Round 2:</strong> Dave said the team doesn't handle Windows. Focus prep on macOS / Jamf; don't lean on Intune stories unless asked.</p>
+
+                <h3>R3-Q1: Most complex infrastructure project</h3>
+                <p><strong>Question:</strong> "Walk me through your most complex infrastructure project — something you designed, implemented, and had to troubleshoot when things went wrong."</p>
+                <blockquote>
+                    "At Metsa I owned endpoint compliance for a fleet that grew from about 30 to 40 devices, mostly MacBooks plus some Windows PCs, with a very small IT team. The goal was to enforce FileVault encryption and a standard app baseline through Jamf Pro and Intune without checking devices by hand.
+
+I built custom Extension Attributes in Jamf to collect data Jamf doesn't gather by default, like FileVault status and browser version, and fed them into Smart Groups. Any non-compliant device flagged itself automatically.
+
+Then, after one policy push, a group of MacBooks stopped checking in and silently dropped out of compliance reporting. I isolated it on a test machine: <code>profiles status -type enrollment</code> to confirm the MDM profile was still there, <code>sudo jamf checkJSSConnection</code> for server connectivity, and <code>/var/log/jamf.log</code> to find the failure. Root cause: the Jamf binary had stopped communicating after a background macOS update. A manual <code>sudo jamf policy</code> plus re-pushing the configuration profile restored check-in, and FileVault status reported correctly again.
+
+The lesson: an assigned profile doesn't mean the local agent is actually checking in. So I created a Smart Group that flags any device with no check-in for 48 hours. That became our early warning for silent failures before they turned into compliance gaps."
+                </blockquote>
+                <p><strong>Key commands to remember:</strong> <code>profiles status -type enrollment</code> · <code>sudo jamf checkJSSConnection</code> · <code>sudo jamf policy</code> · <code>sudo jamf recon</code> (force inventory update) · <code>/var/log/jamf.log</code></p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q2: Google Workspace — first 30 days for a new org</h3>
+                <p><strong>Question:</strong> "Walk me through how you'd implement Google Workspace for a new organization. What would your first 30 days look like?"</p>
+                <blockquote>
+                    "I've worked with Workspace at PwC, and the identity principles are the same on any platform: structure first, then access, then integrations. In 30 days the goal is a secure foundation, not perfection.
+
+Days 1–10, foundation: an OU structure by department and location, for example a Colombia OU, so policies can differ by team. Enforce 2-Step Verification tenant-wide from day one. Configure SPF, DKIM and DMARC so nobody can spoof our domain. Keep super admin to two named people plus a break-glass account, and use delegated admin roles for everything else.
+
+Days 11–20, access: group-based access for distribution lists, shared drives and app access, never permissions on individual accounts. A standard onboarding and offboarding checklist in Jira: account, OU, groups, license on the way in; suspend, transfer Drive data, revoke tokens, remove from groups on the way out.
+
+Days 21–30, integration and hygiene: connect Workspace identity with device management in Jamf and Intune, turn on audit log alerts for suspicious logins and admin changes, review third-party OAuth app access, and put a backup in place for Drive and Gmail.
+
+The lesson I've learned: permissions on individual accounts turn into a mess when people change roles. OUs and groups from day one prevent orphaned access and make audits much easier."
+                </blockquote>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q3: Saturday night — super admin access left open</h3>
+                <p><strong>Question:</strong> "Second week in Colombia ops, 15 hires onboarding next week. Saturday night you find super admin access given to several people who shouldn't have it, including a contractor who no longer works here. SOC 2 gap. What do you do in the next 2 hours?"</p>
+                <blockquote>
+                    "I treat it as a live security incident, not a Monday ticket. A former contractor with super admin is active exposure.
+
+First, I post in the on-call channel to the security lead and my manager that I'm acting. For a change this sensitive, I don't want to act silently.
+
+Step 1, contain: suspend the former contractor's account, sign out all sessions, reset the password, and revoke OAuth tokens and app passwords.
+
+Step 2, reduce: for current employees with super admin, I downgrade anyone who clearly doesn't need it to the minimum delegated role. If I'm not sure whether someone depends on that access, I flag them for a Monday review with their manager instead of breaking something on a Saturday night. Super admin stays with named leads plus a break-glass account.
+
+Step 3, investigate: pull the admin and login audit logs for the last 30 to 90 days. I look for new admins, data exports, mail forwarding rules, new OAuth apps and 2SV changes, especially from the contractor's account. If I find signs of misuse, it becomes a full incident response.
+
+Step 4, protect Monday: verify the onboarding setup for the 15 hires is untouched, meaning accounts, OUs, groups and the Jamf PreStage enrollment.
+
+Step 5, document: a timeline with timestamps, every change, and what the logs showed. I send a summary to the security lead and manager and open a Jira ticket as SOC 2 evidence. Then I propose a quarterly access review so this doesn't happen again."
+                </blockquote>
+                <p><strong>Why this works:</strong> Contain first, don't break the business, escalate early, leave an audit trail, fix the root cause.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q4: AI / Claude in your IT work (REQUIRED in the JD)</h3>
+                <p><strong>Question:</strong> "Experience with Claude or similar AI tools is required. Give me a concrete example of how you've used AI in your IT work. What did it help with, and where did you decide not to trust it?"</p>
+                <blockquote>
+                    "I use Claude as a technical accelerator for drafting and setup, with strict boundaries around execution. I'm actually using it right now to prepare for this process.
+
+At PwC, when I build or refine ticket triage rules and documentation, I feed historical ticket symptoms into the AI and ask it to group recurring issue patterns and produce a first-draft SOP. Instead of writing a troubleshooting guide or a ServiceNow routing rule from scratch, I start from a draft and spend my time reviewing and adjusting the logic. That cuts the initial setup time dramatically. I've also used it to draft self-service guides for remote workers, like home Wi-Fi or printer troubleshooting, so users can fix things themselves instead of opening a ticket.
+
+Where I don't trust it: first, I never give it credentials or confidential company data. Second, I never run AI-generated code directly on production. If it helps me draft a Bash script for Jamf, I read it line by line and test it on an isolated test device first, because AI can get syntax wrong or miss macOS permission edge cases. Third, a command that looks right may not match our macOS version or MDM setup, so the vendor documentation and my own testing are the source of truth.
+
+AI is a great research assistant and first-draft generator, but nothing touches a live environment without human verification."
+                </blockquote>
+                <p><strong>Watch out:</strong> Only give a percentage (e.g. "80%") if you can back it up when they ask "how did you measure that?". Otherwise say "dramatically" or "from hours to minutes".</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q5: Agile + Jira (your clearest gap)</h3>
+                <p><strong>Question:</strong> "Our team works agile in Jira: tickets, story points, backlog, sprints. Your background is ServiceNow. How comfortable are you, and how would you get up to speed in your first two weeks?"</p>
+                <blockquote>
+                    "To be direct: my day-to-day ticketing has been in ServiceNow and Salesforce, not Jira. What transfers is the discipline: at PwC and Metsa I've worked tickets against strict SLAs, prioritized by urgency and business impact, and kept stakeholders updated. What's new for me is running that work in sprints with story points, and I'm already closing that gap. I set up a free Jira instance to practice boards, issue types and automation rules.
+
+In my first two weeks: first, learn how your team uses Jira. Your board, issue types, workflow states and automation rules, and how you point work. Story points are relative effort, so I'd want to see a few reference tickets the team agrees are a 1, a 3 and a 5 before I estimate on my own.
+
+Second, work tickets from day one. Pick up ITSD tickets, write clear work notes, and join sprint planning, standups and retros to learn the rhythm.
+
+Third, use AI to speed up the ramp: drafting SOPs from ticket patterns or first drafts of automation rules, always reviewed by me before anything goes live.
+
+I'd expect to be fully productive in Jira within two weeks, because the hard part, prioritizing and communicating, is something I already do every day."
+                </blockquote>
+                <p><strong>⚠️ Only say "I set up a free Jira instance" if you actually do it before the interview</strong> (free at atlassian.com, 10 minutes). Don't say "very comfortable with agile" unless you've actually worked in sprints.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q6: New MacBook skipped Jamf enrollment, user starts in 2 hours</h3>
+                <p><strong>Question:</strong> "A new hire in Colombia gets a MacBook shipped home, finishes Setup Assistant, reaches the desktop, but never enrolled in Jamf. No apps, no FileVault, no profiles. They start in two hours. What do you do?"</p>
+                <blockquote>
+                    "That's a zero-touch enrollment failure. If the Mac were correctly assigned in Apple Business Manager with a PreStage scoped to it, Setup Assistant wouldn't have let them skip enrollment. So something in the assignment chain broke. I work two tracks: unblock the user, and fix enrollment.
+
+Unblock: I reassure the user and have them log into Google Workspace in the browser with MFA, so they can join day-one meetings while I work.
+
+Diagnose on my side first, it takes a minute: is the serial number in Apple Business Manager? Is it assigned to our Jamf MDM server? Does it show up in the Jamf PreStage enrollment and is it scoped? If anything is missing, I fix the assignment and force a sync from ABM in Jamf.
+
+Then enroll: I have the user run <code>sudo profiles renew -type enrollment</code>. They accept the notification, and the Jamf profile installs. If that doesn't work, since it's a brand-new Mac with no data, I have them run Erase All Content and Settings. It goes back to Setup Assistant and ABM forces enrollment on activation. That's also cleaner for security, because the local admin account they created was never managed.
+
+Verify: in Jamf I check inventory, FileVault is enabled and escrowed, profiles are installed, and core apps landed.
+
+Then prevent it: find out why it happened. Usually the device was bought outside our ABM-linked reseller, or it was never assigned. I'd add a pre-shipping check: every serial confirmed in ABM and in the PreStage before it leaves, and the PreStage set so enrollment is mandatory and the MDM profile can't be removed."
+                </blockquote>
+                <p><strong>Key facts:</strong> <code>sudo profiles renew -type enrollment</code> (re-triggers ADE) · <code>profiles status -type enrollment</code> (checks enrollment state) · Erase All Content and Settings = macOS 12+ on Apple silicon / T2 · Mac bought outside ABM can be added with Apple Configurator for iPhone (requires an erase)</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q7: A mistake that affected users</h3>
+                <p><strong>Question:</strong> "Tell me about a time you made a mistake at work that affected users or the business. What happened, and what did you do about it?"</p>
+                <blockquote>
+                    "At Metsa, I was rolling out a stricter passcode policy through a Jamf configuration profile. My mistake: I scoped it to the entire Mac fleet at once instead of a small pilot group first. The payload forced users to change their password immediately, in the middle of the workday. Five or six people were interrupted mid-meeting, and three got temporarily locked out because their keychain didn't update with the new password.
+
+I owned it right away. I posted in Slack that it was my change, that I knew what was happening, and that I was fixing it. In Jamf I removed the global scope so nobody else got the prompt. Then I worked one-on-one with the three locked-out users to reset their account passwords with our local admin account and get their keychain access working again. Everyone was back up within [X time].
+
+What changed afterwards is the important part. Every profile or policy change now goes through three steps: a test device first, then a small pilot group, then the full fleet. User-facing changes get announced before rollout, with timing that doesn't hit the middle of the workday. And I document every change with a rollback plan, which is exactly the kind of change management your team says is critical for audits.
+
+The lesson: speed matters, but a staged rollout costs me one day and saves everyone else a bad afternoon."
+                </blockquote>
+                <p><strong>⚠️ Only tell this story if it actually happened.</strong> Know the real details: how long the fix took, how many users, what exactly the payload did. They WILL ask follow-ups.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q8: Executive wants local admin now, demo in 30 minutes</h3>
+                <p><strong>Question:</strong> "A senior executive in Colombia messages you on Slack, frustrated. They want local admin rights right now to install an app for a client demo in 30 minutes. Policy says no local admin. What do you do?"</p>
+                <blockquote>
+                    "First, I acknowledge the pressure: 'I understand, let's get you ready for the demo.' The executive doesn't need a policy lecture. They need the app. So my goal is to solve their problem in 30 minutes without giving admin rights.
+
+I ask one question: which app? Then it depends:
+
+If it's already approved, I push it through a Jamf policy or put it in Self Service. They click install, done in five minutes, no admin needed.
+
+If it's a known, safe app that isn't in our catalog yet, I do a quick check, package it, and deploy it through Jamf myself. That's still faster than an admin-rights exception.
+
+If it's unknown or risky, I'm honest: 'I can't install this in 30 minutes safely, but here's what I can do.' Maybe the vendor has a web version, or a teammate can run the demo from an approved machine. If the executive still needs an exception, I escalate right away to my manager and security, so the decision is made by the right people and documented, not decided by me under pressure.
+
+It's not a 'no' to them. It's the same answer anyone would get, and I always offer an alternative.
+
+After the demo, I follow up: if the app is legitimately needed, I add it to Self Service, so the next person gets it in one click."
+                </blockquote>
+                <p><strong>Key tools to know:</strong> Jamf Self Service (user installs approved apps without admin) · Temporary admin tools like the <em>Privileges</em> app or Jamf Connect's temporary elevation (time-limited, logged). Only mention these if you've used them or say "I'd check whether your team uses a tool like...".</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q9: Handling physical hardware in Colombia from Mexico</h3>
+                <p><strong>Question:</strong> "You'll be based in Mexico but you're the IT point of contact for Colombia, including physical inventory, deployment and security. How do you handle the physical side remotely? What happens when a laptop breaks?"</p>
+                <blockquote>
+                    "Since I can't hand someone a laptop in Bogotá, I rely on three things to be my hands: a trusted local vendor, zero-touch enrollment, and clear runbooks. I'd first learn what you already have in place, but this is how I'd set it up.
+
+Procurement and inventory: buy through a local Apple authorized reseller linked to our Apple Business Manager, to avoid import and customs delays. Keep a small buffer of two or three MacBooks with a local logistics partner or at the office. Every serial goes into ABM and a Jamf PreStage before it ships, and every device is tracked in Jamf inventory with an asset record, which also feeds the quarterly audits.
+
+When a laptop breaks: the user comes first, not the laptop. They keep working in Google Workspace from the browser or a secondary device. I ship a replacement from the buffer by local courier. Because it's zero-touch, they open the box, connect to Wi-Fi, and Jamf configures everything. Then I send a prepaid, insured return label for the broken one and it goes to an authorized repair center. And if the logic board is dead and I can't wipe it remotely, the data is still protected because FileVault is enforced on every device.
+
+Offboarding: coordinated with HR timing. Suspend their Workspace account and sessions, transfer their data, remotely lock the Mac through Jamf, send a prepaid box to recover it. Once it's back, wipe it, and it goes back into the buffer stock ready for the next hire. Every step is logged for chain of custody."
+                </blockquote>
+                <p><strong>Notes:</strong> Don't say "Apple and Windows reseller" (they don't do Windows). Lock first, wipe after recovery: wiping immediately can destroy data the company needs to keep. Good question to ask them: <em>"Is there a physical office or hub in Colombia today, or is the team fully remote?"</em></p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>R3-Q10: Salary: "You said $2,300. Still there? No benefits, contractor."</h3>
+                <p><strong>Question:</strong> "In your first interview you mentioned $2,300 USD a month. Is that still where you are? This is a contractor role, so there are no benefits."</p>
+                <blockquote>
+                    "Thanks for being clear about that. When I mentioned $2,300, I was comparing base pay only. Since then I've looked at the full contractor structure: my current role includes medical insurance, a savings fund, a year-end bonus and a performance bonus, and as a contractor I'd cover those myself. So to make this a sustainable move, I'm looking at the top of your posted range, $2,600 a month.
+
+I want to be clear that money isn't why I'm here. I'm excited about the Colombia build-out and the hands-on work. I'm confident we can land on something that works, and I'm happy to finalize details with Fabio."
+                </blockquote>
+                <p><strong>Rules:</strong></p>
+                <ul>
+                    <li>Say the number once, calmly. No "I would think I..." and no "right?" at the end.</li>
+                    <li>Don't list every benefit or ask whether they have them. They already told you there are none.</li>
+                    <li>Explain the change from $2,300 in one sentence ("I was comparing base pay only"). Revising once with a reason is fine; changing again is not.</li>
+                    <li>After you say the number, stop talking.</li>
+                    <li>If they push back: "What flexibility do you have within the range?" Don't drop the number yourself.</li>
+                </ul>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                <h3>Agile refresher for R3-Q5 (know these cold)</h3>                <ul>
+                    <li><strong>Sprint:</strong> fixed work cycle, usually 2 weeks</li>
+                    <li><strong>Backlog:</strong> prioritized list of pending work. <em>Grooming/refinement</em> = reviewing and estimating it</li>
+                    <li><strong>Story points:</strong> relative effort, not hours. Usually Fibonacci: 1, 2, 3, 5, 8, 13. Big number = more complex/uncertain → split it</li>
+                    <li><strong>Epic → Story → Task/Sub-task:</strong> big initiative → deliverable piece → concrete step</li>
+                    <li><strong>Ceremonies:</strong> Sprint planning (what we commit to), Daily standup (yesterday / today / blockers), Sprint review (show results), Retro (what to improve)</li>
+                    <li><strong>Velocity:</strong> points a team completes per sprint, used to plan the next one</li>
+                    <li><strong>Jira Service Management (JSM):</strong> Jira's ITSM product. Has queues, SLAs, request types, portal = the ServiceNow equivalent. "ITSD" in the JD = IT Service Desk project</li>
+                    <li><strong>Kanban vs Scrum:</strong> Kanban = continuous flow with WIP limits (common for support queues). Scrum = fixed sprints (common for project/backlog work). Sezzle likely uses both: tickets as flow, initiatives in sprints</li>
+                </ul>
+            </section>
+
+            <!-- SHORT SCRIPTS -->
+            <section id="short-scripts">
+                <h2>Short Scripts: Technical Scenarios (say it like this)</h2>
+                <p><strong>Rule: 45–75 seconds. Say the key points, then: "Happy to go deeper on any of those." Let them ask follow-ups.</strong></p>
+
+                <h3>S1: Mac hasn't checked in to Jamf for 12 days</h3>
+                <blockquote>"So first I'd check if it's just this Mac or other devices too, because if it's several, it's probably a server or network issue, not the laptop.
+
+If it's just this one, I'd get on a call with the user, check the basics like the network and the date and time, and then have them open Terminal. I'd run jamf checkJSSConnection to see if it reaches the server, force a check-in with jamf policy, and look at the jamf.log to see where it fails. Then profiles status to confirm it's still enrolled in MDM.
+
+To tell the two cases apart: if the connection works and the MDM profile is there, the daemon is just stuck. I run jamf manage and a recon, and it comes back. But if I see a device signature or certificate error, or the MDM profile is gone, it lost trust with the server, and the fix is re-enrolling with profiles renew, or worst case, wipe it and let it enroll again.
+
+And after that, I'd set up an alert for devices that haven't checked in for a couple of days, so we don't find out after twelve.
+
+Happy to go deeper on any of those steps."</blockquote>
+                <p><strong>If they dig:</strong> Jamf has two channels: the <em>binary</em> (policies, packages, inventory, checks in ~every 15 min) and <em>MDM/APNs</em> (profiles, commands). Send an Update Inventory MDM command from the console: completes = MDM OK, problem is the binary; stays pending = MDM broken too. Also check: disk full, wrong clock, VPN/proxy. Commands: <code>sudo jamf checkJSSConnection</code> · <code>sudo jamf policy -verbose</code> · <code>sudo launchctl list | grep jamf</code> · <code>sudo profiles status -type enrollment</code> · <code>sudo profiles list</code> · <code>log show --last 1d --predicate 'process == "mdmclient"'</code> · <code>sudo jamf manage</code> · <code>sudo jamf recon</code> · <code>sudo profiles renew -type enrollment</code> · logs: <code>/var/log/jamf.log</code>, <code>/var/log/install.log</code></p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>S2: Friday 4:30 PM, high-security user terminated for policy violation</h3>
+                <blockquote>"First thing, I'd coordinate with HR on timing. Ideally I cut access while they're on the call with the person, not before and not after.
+
+Then identity first, because that's the front door. In Entra ID, I block sign-in and revoke all their sessions, so every single sign-on app is cut off. In Google Workspace, I suspend the account, sign them out everywhere, reset the password, and revoke app passwords and third-party tokens. I remove them from any groups with access to financial data, and any shared credentials they knew get rotated.
+
+For the Mac, I send a remote lock from Jamf, not a wipe. It's a policy violation, so there might be an investigation, and wiping would destroy evidence. The data's already protected because FileVault is on. Then we arrange to get the device back.
+
+The whole time, I'm logging timestamps for every step. For SOC 2, that's the proof access was removed right away. After that, I review audit logs for any unusual downloads or sharing."</blockquote>
+                <p><strong>Key point:</strong> LOCK, don't wipe (evidence). <strong>If they dig:</strong> Entra access tokens can stay valid up to ~1 hour, so also revoke sessions directly in critical apps.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>S3: EDR update triggers Full Disk Access / system extension prompts</h3>
+                <blockquote>"macOS doesn't let an app get Full Disk Access or system extensions unless someone approves it. Without admin rights, the only way is for Jamf to approve it ahead of time with configuration profiles. So either the profiles were missing, or the new version needed something the old profile didn't cover.
+
+First, I'd pause the rollout.
+
+Then I'd push the right profiles: one for Full Disk Access, and one that allows the vendor's system extension. The vendor usually documents exactly what's needed. Once they're installed, I re-run the install. The user doesn't touch anything.
+
+For the future: profiles always go out before the app, and I test every update on a Mac with a normal user account, not an admin one. If the popup shows up there, it never reaches users."</blockquote>
+                <p><strong>If they dig:</strong> Full Disk Access = <strong>PPPC</strong> profile (Privacy Preferences Policy Control), built with Jamf's PPPC Utility. System extensions = <strong>System Extensions</strong> payload, allowed by the vendor's <strong>Team ID</strong>. Scope the install policy to a Smart Group of Macs that already have the profile. Verify with <code>profiles list</code> and <code>systemextensionsctl list</code>.</p>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>S4: 5 engineers start in 3 weeks, MacBooks backordered 5 weeks</h3>
+                <blockquote>"First, I'd tell HR and the engineering manager right away, so there are no surprises in three weeks.
+
+Then I'd look for Macs in this order. One, other authorized resellers in Colombia linked to our Apple Business Manager. Two, a different model or configuration that's in stock now, if the engineering manager agrees it works. Three, devices we already have: the buffer stock, or laptops from people who left, wiped and redeployed.
+
+Whatever we get has to be in Apple Business Manager, so it enrolls automatically. I wouldn't ship from Mexico, because customs could take longer than the backorder.
+
+If we still come up short, I prioritize who needs a Mac on day one, and the rest start onboarding in Google Workspace for a few days. What I wouldn't do is let them use personal laptops on company systems."</blockquote>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>S5: CIS controls on a Mac fleet</h3>
+                <blockquote>"CIS controls are a prioritized list of security practices. SOC 2 and PCI tell you what you have to prove, and CIS gives you a practical way to get there. For Macs, there's also the CIS benchmark with specific settings.
+
+I'd start with the basics: know every device and app we have, which Jamf inventory gives us. Then a secure baseline pushed through Jamf: FileVault, firewall, screen lock, no local admin. I wouldn't build it by hand. There's an open-source project, the macOS Security Compliance Project, that generates the Jamf profiles mapped to the benchmark.
+
+Then Smart Groups catch any Mac that drifts, like someone turning off the firewall. And the same reports become our audit evidence."</blockquote>
+            </section>
+
+            <!-- MODEL ANSWERS -->
+            <section id="model-answers">
+                <h2>Model Answers (illustrative)</h2>
+                <p><strong>⚠️ Everything <span class="highlight">[EXAMPLE: highlighted]</span> is invented to show the level of detail expected. Replace it with something that really happened to you before using it, or drop it.</strong></p>
+
+                <h3>M1: "Why should we hire you over other candidates?"</h3>
+                <blockquote>
+                    "Three reasons. First, I've done this exact job at small scale: at Metsa I was the IT person for a growing Mac fleet, and I automated onboarding with Jamf and Apple Business Manager so a new hire got a ready device without me touching it. That's what Colombia needs.
+
+Second, I've worked under the compliance you care about: PCI-DSS at CitiBanamex and SOC 2 controls at PwC. I know audits need evidence, not just good intentions.
+
+Third, I fix things so they stay fixed. When devices silently stopped checking in at Metsa, I didn't just fix it once. I built a 48-hour check-in alert so it couldn't happen quietly again.
+
+I'll be honest about my gap: Jira. But I already manage tickets against SLAs every day, and I'm ramping up on Jira now."
+                </blockquote>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>M2: "Several urgent things at once. How do you prioritize?"</h3>
+                <p><em>Scenario: CEO can't join a board call, a new hire's Mac isn't ready, and a security alert fires, all at 9am.</em></p>
+                <blockquote>
+                    "I rank by impact and risk, not by who's asking loudest.
+
+Security goes first if it's a real exposure, so I spend two minutes checking the alert. If it's a <span class="highlight">[EXAMPLE: suspicious login from another country]</span>, I suspend the session immediately. That takes one minute and removes the risk.
+
+Then the CEO: a board call is time-critical and highly visible. I get them in however I can, even from their phone, then fix the root cause after the call.
+
+The new hire isn't blocked from starting: they can join onboarding in Workspace from the browser while I fix the device.
+
+And I tell everyone what's happening: the new hire's manager gets a heads-up, so nobody wonders. At PwC, working to SLAs taught me that clear communication matters as much as the fix."
+                </blockquote>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>M3: "Tell me about a conflict or disagreement with a teammate."</h3>
+                <blockquote>
+                    "<span class="highlight">[EXAMPLE: At PwC, a teammate wanted to close tickets as soon as the workaround was applied, to protect our SLA numbers. I disagreed, because the same issues kept coming back and users were reopening tickets.]</span>
+
+I didn't argue it in the team chat. I pulled the data: <span class="highlight">[EXAMPLE: about 20% of our tickets in one category were repeats within two weeks]</span>. I showed it to him privately and proposed a middle ground: close the ticket on the workaround, but open a linked problem ticket for the root cause.
+
+He agreed, our lead adopted it, and <span class="highlight">[EXAMPLE: repeat tickets in that category dropped noticeably the next quarter]</span>.
+
+What I learned: disagreements go better with data and a proposal, not opinions."
+                </blockquote>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>M4: "Explain a technical issue to a non-technical person."</h3>
+                <p><em>Common version: "Explain to a new employee why FileVault and MFA are mandatory."</em></p>
+                <blockquote>
+                    "I'd say: 'Your laptop is like a safe. FileVault locks everything inside it, so if it's stolen from a café, whoever takes it gets a brick, not our customers' data. MFA is like needing your key and your fingerprint to open the office: even if someone steals your password, they still can't get in. You'll barely notice either one day to day, and they protect you as much as the company.'
+
+My rule: no jargon, one analogy, and always explain what's in it for them."
+                </blockquote>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>M5: "How would you run IT onboarding training for new hires?"</h3>
+                <blockquote>
+                    "Short, practical and repeatable. A 30-minute session in week one, not a two-hour lecture.
+
+Before day one: the device ships pre-enrolled, and the new hire gets a one-page welcome guide: how to log in, set up MFA, and where to ask for help.
+
+Session content: MFA and password manager setup, done live together; how to request help in the Jira service desk; Self Service for apps; and the three security habits that matter most: lock your screen, don't reuse passwords, report phishing.
+
+After: a short checklist they complete, and I verify in Jamf and the Workspace admin console that everything is compliant.
+
+I'd also keep the material as a documented, reusable deck, so anyone on the team can run it the same way. That fits your focus on replicable documentation."
+                </blockquote>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>M6: "How would you run the quarterly software vendor audit?"</h3>
+                <blockquote>
+                    "The goal is to answer three questions: what are we paying for, who has access, and is it still needed and secure.
+
+First, the inventory: pull the list of apps from finance or expense records, Jamf's installed-apps inventory, and the third-party apps connected to Google Workspace. Comparing those three lists shows 'shadow IT' fast.
+
+Then for each vendor: licenses paid versus licenses actually used, access review (every account belongs to a current employee), and security: does the vendor still have a valid SOC 2 report.
+
+Then act: remove unused licenses, remove access for people who left or changed roles, and flag vendors without current compliance documents to security.
+
+And document it all in a Jira ticket per quarter, so the next audit starts from evidence. <span class="highlight">[EXAMPLE: In my experience, these reviews almost always turn up paid licenses for people who already left.]</span>"
+                </blockquote>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                <h3>M7: "What's your biggest weakness?"</h3>
+                <blockquote>
+                    "Jira and agile ceremonies. My ticketing experience is ServiceNow and Salesforce, so sprint planning and story points are newer for me. What I'm doing about it: I set up a free Jira instance and I'm practicing boards and automation rules, and I've studied how Jira Service Management maps to what I already do in ServiceNow. I expect it to take a couple of weeks, not months, because the underlying discipline, prioritizing and hitting SLAs, is something I already do daily."
+                </blockquote>
+                <p><strong>Why this works:</strong> A real weakness relevant to the role, plus proof you're already fixing it. Never use "I'm a perfectionist."</p>
             </section>
 
             <!-- ASK THEM -->
